@@ -9,15 +9,19 @@ input_nombre_carpeta = input("nombre de la carpeta, vacio para que tenga el nomb
 if len(input_nombre_carpeta) > 0:
     nombre_carpeta = input_nombre_carpeta
 else:
-    nombre_carpeta = datetime.today().strftime("%D-%M-%Y")
+    nombre_carpeta = datetime.today().strftime("%d-%M-%Y")
+
+path_actual = os.path.dirname(os.path.abspath(__file__))
+path_completo = path_actual + "/" + nombre_carpeta + "/" + "'%(uploader)s-%(title)s'"
+os.system("mkdir %s" % nombre_carpeta)
 
 def bajarse_audios(lista_links, nombre_carpeta):
     for link in lista_links:
         # Crear carpeta
         os.system("mkdir " + nombre_carpeta)
-
-        comando_basico = "youtube-dl -f 140 --no-overwrites --playlist-end 3 -o '%(uploader)s-%(title)s' "
-        comando_completo = comando_basico + "" + '"' + link + '"'
+	
+        comando_basico = "youtube-dl -f 140 --no-overwrites -o " + '"' + path_completo + '" '
+        comando_completo = comando_basico + ' "' + link + '"'
         print(comando_completo)
         os.system(comando_completo)
 
@@ -28,6 +32,6 @@ def recibir_input(nombre_carpeta):
         bajarse_audios(lista_links, nombre_carpeta)
     else:
         lista_links.append(texto_input)
-        recibir_input()
+        recibir_input(nombre_carpeta)
 
-recibir_input()
+recibir_input(nombre_carpeta)
